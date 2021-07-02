@@ -15,7 +15,6 @@ prod_params = {
     "N_prod" : 5
 }
 
-
 def product_ranker(prod_params):
     """
 
@@ -42,28 +41,12 @@ def product_ranker(prod_params):
         dict_USE = scores_USE_server(embeddings_title_USE, embeddings_descrip_USE, Df_ST, keyword_ST[index],prod_params.get("lang","en"))
         results = final_results(dict_exact, dict_bert, dict_USE, prod_params.get("N_prod", 3), Df)
         dict_res["kwd_value"] = prod_params.get("kwds")[index]
-        dict_res["top_n_results"] = [results[['score','title','description']].to_dict()]
+        dict_res["top_n_results"] = results[['score','title','description','brand']].to_dict()
 
         list_res.append(dict_res)
 
     return list_res
 
-# def product_rank_bart(prod_params):
-#     list_res = []
-#     Df = pd.DataFrame(prod_params.get("data"))
-#     Df_ST = basic_preprocessing_ST(Df)
-#     keyword_ST = basic_preprocessing_keywords_ST(prod_params.get("kwds").copy())
-#     for index in range(len(keyword_ST)):
-#         dict_res = {}
-#         dict_bart = bart_scores(Df_ST,keyword_ST[index],prod_params.get("lang","en"))
-#         results = bart_result(dict_bart,prod_params.get("N_prod",3), Df)
-#         # print(results)
-#         dict_res["kwd_value"] = prod_params.get("kwds")[index]
-#         dict_res["top_n_results"] = [results[['score', 'title', 'description']].to_dict()]
-#
-#         list_res.append(dict_res)
-#
-#     return list_res
 
 start = time.time()
 list_ = product_ranker(prod_params)
